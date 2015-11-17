@@ -77,6 +77,17 @@ bool ESP8266::restart(void)
     return false;
 }
 
+bool ESP8266::getMUX()
+{
+    bool mode;
+    
+    if (qATCIPMUX(&mode)) {
+      return mode;
+    } else {
+      return false;
+    }
+}
+
 String ESP8266::getVersion(void)
 {
     String version;
@@ -674,6 +685,23 @@ bool ESP8266::eATCIFSR(String &list)
     rx_empty();
     m_puart->println("AT+CIFSR");
     return recvFindAndFilter("OK", "\r\r\n", "\r\n\r\nOK", list);
+}
+bool ESP8266::qATCIPMUX(bool *mode) 
+{
+    String str_mode;
+    bool ret;
+    if (!mode) {
+        return false;
+    }
+    rx_empty();
+    m_puart->println("AT+CIPMUX?");
+    ret = recvFindAndFilter("OK", "+CIPMUX:", "\r\n\r\nOK", str_mode); 
+    if (ret) {
+        *mode = (bool)str_mode.toInt();
+        return true;
+    } else {
+        return false;
+    }
 }
 bool ESP8266::sATCIPMUX(uint8_t mode)
 {

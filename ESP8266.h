@@ -24,7 +24,7 @@
 #include "Arduino.h"
 
 
-//#define ESP8266_USE_SOFTWARE_SERIAL
+#define ESP8266_USE_SOFTWARE_SERIAL
 
 
 #ifdef ESP8266_USE_SOFTWARE_SERIAL
@@ -80,7 +80,15 @@ class ESP8266 {
      * @retval false - failure.
      */
     bool restart(void);
-    
+
+    /**
+     * Gets the MUX(multiple connection mode).
+     *
+     * @retval true - MUX is enabled.
+     * @retval false - MUX is disabled.
+     */
+    bool getMUX(void);
+
     /**
      * Get the version of AT Command Set. 
      * 
@@ -448,6 +456,7 @@ class ESP8266 {
     bool sATCIPCLOSEMulitple(uint8_t mux_id);
     bool eATCIPCLOSESingle(void);
     bool eATCIFSR(String &list);
+    bool qATCIPMUX(bool * mode);
     bool sATCIPMUX(uint8_t mode);
     bool sATCIPSERVER(uint8_t mode, uint32_t port = 333);
     bool sATCIPSTO(uint32_t timeout);
